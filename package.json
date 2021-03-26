@@ -1,0 +1,15 @@
+{
+  "name": "ion-blockcerts",
+  "version": "1.0.0",
+  "description": "Experimentation with ION with Blockcerts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "contributors": ["Julien Fraichot", "Matthieu Collé"],
+  "author": "Hyland Software",
+  "license": "ISC",
+  "dependencies": {
+    "@decentralized-identity/ion-tools": "github:decentralized-identity/ion-tools"
+  }
+}
