@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>ION + Blockcerts</title>
+  </head>
+
+  <body>
+    <button id="generate_did">Generate Test DID</button>
+
+    <h2>Short-Form DID URI</h2>
+    <pre id="print_short"></pre>
+
+    <h2>Long-Form DID URI</h2>
+    <pre id="print_long" wrap-text></pre>
+
+    <h2>DID Request Object (for creation)</h2>
+    <pre id="print_request"></pre>
+
+    <h2>Anchored DID Document</h2>
+    <pre id="anchored_did_document"></pre>
+
+    <button id="submit_pow" style="display: none;">Anchor DID</button>
+
+    <script src="node_modules/@decentralized-identity/ion-tools/dist/ion.js"></script>
+    <script>
+      async function generateDID(){
+        let authnKeys = await ION.generateKeyPair();
+        return new ION.DID({
+          content: {
+            publicKeys: [{
+              id: 'key-1',
+              type: 'EcdsaSecp256k1VerificationKey2019',
+              publicKeyJwk: authnKeys.publicJwk,
+              purposes: [ 'authentication'  ]
+            }],
+            services: [{
+              id: 'domain-1',
+              type: 'LinkedDomains',
+              serviceEndpoint: 'https://foo.example.com'
+            }]
+          }
+        });
+      }
+
+      JSON.pretty = json => JSON.stringify(json, null, 2)
+      let request;
+
+      generate_did.addEventListener('click', async e => {
+        let did = await generateDID();
+        print_short.textContent = JSON.pretty(await did.getURI('short'));
+        print_long.textContent = JSON.pretty(await did.getURI('long'));
+
+        request = await did.generateRequest(0);
+        print_request.textContent = JSON.pretty(request);
+
+        toggleAnchorButton(true);
+      });
+
+      function toggleAnchorButton (show) {
+        submit_pow.style.display = show ? 'block': 'none';
+      }
+
+      function showAnchoredDidDocument (didDocument) {
+        anchored_did_document.textContent = didDocument;
+      }
+
+      submit_pow.addEventListener('click', async () => {
+        submit_pow.textContent = "submitting request... look at console to see progress and result";
+        const anchoredDidDocument = await new ION.AnchorRequest(request).submit();
+        showAnchoredDidDocument(anchoredDidDocument);
+      });
+    </script>
+  </body>
+
+</html>
+
