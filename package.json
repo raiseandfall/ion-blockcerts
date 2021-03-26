@@ -6,10 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "contributors": ["Julien Fraichot", "Matthieu Collé"],
+  "contributors": [
+    "Julien Fraichot",
+    "Matthieu Collé"
+  ],
   "author": "Hyland Software",
   "license": "ISC",
   "dependencies": {
-    "@decentralized-identity/ion-tools": "github:decentralized-identity/ion-tools"
+    "@decentralized-identity/ion-tools": "^0.0.1"
   }
 }
